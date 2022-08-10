@@ -1,0 +1,2 @@
+module RatingAppointmentsHelper
+end
