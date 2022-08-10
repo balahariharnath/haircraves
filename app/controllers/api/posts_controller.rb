@@ -10,13 +10,17 @@ class Api::PostsController < ApplicationController
   def post_details
     @post = Post.find(params[:id])
     render json: {post: @post.as_json(include: {tag_users: {methods: [:profile_image_url, :cover_image_url]}, items: {methods:
-                  [:image_urls, :video_url]}, :likes=> {}, :comments=> {include: {user: {methods: [:profile_image_url]}}}})}
+                  [:image_urls, :video_url]}, :likes=> {}, :comments=> {include: {user: {methods: [:profile_image_url]}}}}, methods: [:image_url])}
   end
 
   def post_list
-    @posts = Post.all
+    if params[:service_category_id].present?
+      @posts = Post.where("service_category_id = ?", params[:service_category_id])
+    else
+      @posts = Post.all
+    end
     render json: {posts: @posts.as_json(include: {tag_users: {methods: [:profile_image_url, :cover_image_url]}, items: {methods:
-                         [:image_urls, :video_url]}, :likes=> {}, :comments=> {include: {user: {methods: [:profile_image_url]}}}})}
+                         [:image_urls, :video_url]}, :likes=> {}, :comments=> {include: {user: {methods: [:profile_image_url]}}}}, methods: [:image_url])}
   end
 
   def like_post
@@ -33,6 +37,6 @@ class Api::PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:image, :title, :service_name, :description, :tag_user_ids => [], :item_ids => [])
+    params.require(:post).permit(:image, :title, :service_category_id, :description, :tag_user_ids => [], :item_ids => [])
   end
 end

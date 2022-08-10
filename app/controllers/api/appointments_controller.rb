@@ -21,13 +21,18 @@ class Api::AppointmentsController < ApplicationController
   end
 
   def my_bookings
-    @bookings = current_user.appointments.where("status NOT IN (?)", [3,5]) if params[:upcoming_booking].present?
-    @bookings = current_user.appointments.where("status IN (?)", [3,5]) if params[:completed_booking].present?
-    render json: {bookings: @bookings.as_json(include: {stylist: {methods: [:profile_image_url, :cover_image_url]}})}
+    if current_user.role.role_name == 'customer'
+      @bookings = current_user.appointments.where("status NOT IN (?)", [3,5]) if params[:upcoming_booking].present?
+      @bookings = current_user.appointments.where("status IN (?)", [3,5]) if params[:completed_booking].present?
+    else
+      @bookings = current_user.service_appointments.where("status NOT IN (?)", [3,5]) if params[:upcoming_booking].present?
+      @bookings = current_user.service_appointments.where("status IN (?)", [3,5]) if params[:completed_booking].present?
+    end
+    @bookings = @bookings.where("booking_date = ?", params[:date].to_date) if params[:date].present? && @bookings.present?
+    render json: {bookings: @bookings.as_json(include: {stylist: {methods: [:profile_image_url, :cover_image_url]}, user: {methods: [:profile_image_url, :cover_image_url]}})}
   end
 
   def details
-    # @appointment = Appointment.
     render json: {appointment: @appointment.as_json(include: [:services, :stylist => {methods: [:profile_image_url, :cover_image_url]}])}
   end
 

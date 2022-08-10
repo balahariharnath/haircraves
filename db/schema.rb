@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_112659) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -234,11 +234,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_112659) do
 
   create_table "posts", force: :cascade do |t|
     t.string "title"
-    t.string "service_name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.bigint "service_category_id"
+    t.index ["service_category_id"], name: "index_posts_on_service_category_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -353,17 +354,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_112659) do
 
   create_table "service_categories", force: :cascade do |t|
     t.string "name"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_service_categories_on_user_id"
   end
 
   create_table "service_favorites", force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.bigint "stylist_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "stylist_id"
     t.index ["stylist_id"], name: "index_service_favorites_on_stylist_id"
     t.index ["user_id"], name: "index_service_favorites_on_user_id"
   end
@@ -433,7 +432,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_112659) do
   add_foreign_key "rating_appointments", "users"
   add_foreign_key "rating_orders", "orders"
   add_foreign_key "rating_orders", "users"
-  add_foreign_key "service_categories", "users"
   add_foreign_key "service_favorites", "users"
   add_foreign_key "service_favorites", "users", column: "stylist_id"
   add_foreign_key "services", "users"

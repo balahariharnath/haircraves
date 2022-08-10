@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     get 'destroy_service', to: 'services#destroy_service'
     get 'service_category', to: 'services#service_categories'
     get 'profile', to: 'services#profile'
+    get 'service_providers', to: 'services#service_providers'
 
     get 'availability_list', to: 'availabilities#availability_list'
     patch 'update_availability', to: 'availabilities#update_availability'

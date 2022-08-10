@@ -2,6 +2,7 @@ class Post < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :user
+  belongs_to :service_category
   has_one_attached :image
   has_and_belongs_to_many :tag_users, class_name: 'User', join_table: 'posts_users'
   has_and_belongs_to_many :items, join_table: 'posts_items'
