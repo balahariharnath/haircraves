@@ -63,7 +63,7 @@ class User < ApplicationRecord
 
   def profile_image_url
     self.image.present? ? rails_blob_path(self.image, disposition: "attachment", only_path: true) : nil
-    end
+  end
 
   def cover_image_url
     self.cover_image.present? ? rails_blob_path(self.cover_image, disposition: "attachment", only_path: true) : nil
