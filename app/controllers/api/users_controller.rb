@@ -37,21 +37,21 @@ class Api::UsersController < ApplicationController
     end
   end
 
-  def forgot_password
-    if params[:email].blank? # check if email is present
-      return render json: {error: 'Email not present'}
-    end
-
-    user = User.find_by(email: params[:email]) # if present find user by email
-
-    if user.present?
-      user.generate_password_token! #generate pass token
-      Devise::Mailer.welcome_reset_password_instructions(user).deliver_now
-      render json: {status: 'ok'}, status: :ok
-    else
-      render json: {error: ['Email address not found. Please check and try again.']}, status: :not_found
-    end
-  end
+  # def forgot_password
+  #   if params[:email].blank? # check if email is present
+  #     return render json: {error: 'Email not present'}
+  #   end
+  #
+  #   user = User.find_by(email: params[:email]) # if present find user by email
+  #
+  #   if user.present?
+  #     user.generate_password_token! #generate pass token
+  #     Devise::Mailer.welcome_reset_password_instructions(user).deliver_now
+  #     render json: {status: 'ok'}, status: :ok
+  #   else
+  #     render json: {error: ['Email address not found. Please check and try again.']}, status: :not_found
+  #   end
+  # end
 
   private
 
