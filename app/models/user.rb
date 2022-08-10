@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :likes, join_table: 'likes', class_name: 'Post'
 
   has_many :categories
+  has_many :items
   has_many :availabilities
   has_one :portfolio
   belongs_to :role

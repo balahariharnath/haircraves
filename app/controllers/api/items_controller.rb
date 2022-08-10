@@ -2,8 +2,8 @@ class Api::ItemsController < ApplicationController
   load_and_authorize_resource
 
   def create
-    @item = Item.new(item_params)
-    if @item.category.try(:user_id) == current_user.id && @item.save
+    @item = current_user.items.new(item_params)
+    if @item.save
       render json: {message: "Item created Successfully", item: @item.as_json(methods: [:image_urls, :video_url])}, status: :created
     else
       render json: {error: @item.errors.present? ? @item.errors.full_messages : "Category is not valid"}, status: :unprocessable_entity
@@ -13,7 +13,7 @@ class Api::ItemsController < ApplicationController
   def update
     @item = Item.find(params[:id])
     @item.assign_attributes(item_params)
-    if @item.category.try(:user_id) == current_user.id && @item.save
+    if @item.save
       render json: {message: "Item Updated Successfully", item: @item.as_json(methods: [:image_urls, :video_url])}, status: 302
     else
       render json: {error: @item.errors.present? ? @item.errors.full_messages : "Category is not valid"}, status: :unprocessable_entity
@@ -33,6 +33,10 @@ class Api::ItemsController < ApplicationController
     else
       render json: {error: "Category is not valid / No Items are present"}, status: :unprocessable_entity
     end
+  end
+
+  def details
+    render json: {item: @item.as_json(methods: [:image_urls, :video_url], include: [:user => {methods: [:profile_image_url]}])}
   end
 
   private

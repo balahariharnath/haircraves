@@ -2,6 +2,7 @@ class Item < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :category
+  belongs_to :user
   has_many :orders
   has_many_attached :images, dependent: :destroy
   has_one_attached :video, dependent: :destroy

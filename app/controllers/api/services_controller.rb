@@ -34,6 +34,12 @@ class Api::ServicesController < ApplicationController
     render json: {services: @services.as_json(include: {:service_category => {}})}
   end
 
+  def profile
+    @user = User.find([params[:user_id]])
+    render json: {user: @user.as_json(methods: [:profile_image_url, :cover_image_url], include: [:portfolio => {methods: [:image_url, :video_url]},
+                                               :services => {}, :items => {methods: [:image_urls, :video_url]}, :availabilities => {}])}
+  end
+
   private
 
   def service_params

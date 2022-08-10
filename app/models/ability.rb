@@ -10,16 +10,16 @@ class Ability
       can :manage, Service, :user_id => user.id
       can :manage, Availability, :user_id => user.id
       can :manage, Category, :user_id => user.id
-      can :manage, Item, :all
+      can :manage, Item, :user_id => user.id
       can [:post_details, :post_list, :like_post], Post
       can [:update], Appointment, :stylist_id => user.id
       can :manage, Portfolio, :user_id => user.id
     else
       if user.role.role_name == 'customer'
-        can :service_list, Service
+        can [:service_list, :profile], Service
         can :manage, Post, :user_id => user.id
         can :category_list, Category
-        can :items_list, Item
+        can [:items_list, :details], Item
         can :manage, Appointment, :user_id => user.id
         can :manage, Address, :user_id => user.id
         can :manage, Card, :user_id => user.id

@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     patch 'edit_service', to: 'services#edit_service'
     get 'destroy_service', to: 'services#destroy_service'
     get 'service_category', to: 'services#service_categories'
+    get 'profile', to: 'services#profile'
 
     get 'availability_list', to: 'availabilities#availability_list'
     patch 'update_availability', to: 'availabilities#update_availability'
@@ -36,6 +37,7 @@ Rails.application.routes.draw do
     patch 'update_item', to: 'items#update'
     get 'destroy_item', to: 'items#destroy'
     get 'items_list', to: 'items#items_list'
+    get 'item_details', to: 'items#details'
 
     post 'create_post', to: 'posts#create'
     get 'post_details', to: 'posts#post_details'
@@ -46,6 +48,8 @@ Rails.application.routes.draw do
 
     post 'create_booking', to: 'appointments#create_booking'
     patch 'update_appointment', to: 'appointments#update'
+    get 'my_bookings', to: 'appointments#my_bookings'
+    get 'appointment_details', to: 'appointments#details'
 
 
     post 'create_address', to: 'addresses#create'
