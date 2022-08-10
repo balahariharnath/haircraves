@@ -1,18 +1,18 @@
 Rails.application.routes.draw do
-  resources :rating_appointments
-  resources :services
+  # resources :rating_appointments
+  # resources :services
   get 'device_infos/create'
-  resources :orders
-  resources :appointments
-  resources :banks
-  resources :cards
-  resources :addresses
-  resources :comments
-  resources :items
-  resources :categories
-  resources :availabilities
+  # resources :orders
+  # resources :appointments
+  # resources :banks
+  # resources :cards
+  # resources :addresses
+  # resources :comments
+  # resources :items
+  # resources :categories
+  # resources :availabilities
   devise_for :users
-  resources :users
+  # resources :users
 
   namespace :api do
     get 'get_roles', to: 'general_infos#get_roles'
@@ -66,11 +66,16 @@ Rails.application.routes.draw do
     post 'add_service_favourites', to: 'item_favorites#add_service_favourites'
     get 'favourite_service_providers', to: 'item_favorites#favourite_service_providers'
 
+    post 'create_portfolio', to: 'portfolios#create'
+    patch 'update_portfolio', to: 'portfolios#update'
+    get 'destroy_portfolio', to: 'portfolios#destroy'
+    get 'portfolio', to: 'portfolios#index'
+
 
     get 'check_api', to: 'users#check_api'
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  root "users#index"
+  # root "users#index"
 end

@@ -13,7 +13,7 @@ class Ability
       can :manage, Item, :all
       can [:post_details, :post_list, :like_post], Post
       can [:update], Appointment, :stylist_id => user.id
-      can :manage, Portfolio, user_id => user.id
+      can :manage, Portfolio, :user_id => user.id
     else
       if user.role.role_name == 'customer'
         can :service_list, Service

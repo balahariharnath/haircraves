@@ -13,6 +13,7 @@ class User < ApplicationRecord
 
   has_many :categories
   has_many :availabilities
+  has_one :portfolio
   belongs_to :role
   has_one_attached :image
   has_one_attached :cover_image
