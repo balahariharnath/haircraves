@@ -44,6 +44,7 @@ class Api::ServicesController < ApplicationController
     @service_providers = User.eager_load(:services).where("services.service_category_id = ?", params[:service_category_id])
     @service_providers = @service_providers.order('services.price desc') if params[:desc].present?
     @service_providers = @service_providers.order('services.price asc') if params[:asc].present?
+    @service_providers = @service_providers.where("average_rating >= ?", params[:rating]) if params[:rating].present?
     @service_providers = @service_providers.where('users.id IN (?)', current_user.fav_service_ids) if params[:fav].present?
     render json: {service_providers: @service_providers.as_json(methods: [:profile_image_url])}
   end

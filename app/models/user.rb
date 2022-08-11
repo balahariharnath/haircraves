@@ -33,16 +33,22 @@ class User < ApplicationRecord
   has_many :sender_conversations, class_name: "Conversation", :foreign_key => "sender_id"
   has_many :receiver_conversations, class_name: "Conversation", :foreign_key => "receiver_id"
   has_many :device_infos
-  has_many :rating_appointments
+  # has_many :rating_appointments
   has_many :item_favorites
   has_many :fav_items, class_name: 'Item', through: :item_favorites, source: :item
   has_many :service_favorites
   has_many :fav_users, class_name: 'User', through: :service_favorites, source: :user
   # has_many :service_users, class_name: 'ServiceFavorite', foreign_key: 'stylist_id'
   has_many :fav_services, class_name: 'User', through: :service_favorites, source: :stylist
-  has_many :rating_orders
-  has_many :rate_orders, class_name: 'Order', through: :rating_orders, source: :order
+
+  # has_many :rating_orders
+  # has_many :rate_orders, class_name: 'Order', through: :rating_orders, source: :order
+  has_many :rate_service_providers
+  has_many :rate_users, class_name: 'User', through: :rate_service_providers, source: :stylist
+  has_many :ratings, foreign_key: 'stylist_id', class_name: "RateServiceProvider"
   has_many :service_appointments, class_name: 'Appointment', foreign_key: "stylist_id"
+  has_many :item_ratings
+  has_many :rated_items, class_name: 'Item', through: :item_ratings, source: :item
 
   #=========================== Validations =======================================================
   validates_presence_of :location, :business_name, :address, if: -> {self.role.role_name == 'stylist' || self.role.role_name == 'business_owner'}

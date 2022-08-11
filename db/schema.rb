@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_11_121249) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -105,10 +105,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
     t.string "card_number"
     t.string "card_holder_name"
     t.string "exp_date"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.bigint "user_id"
     t.index ["deleted_at"], name: "index_cards_on_deleted_at"
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
@@ -175,6 +175,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
     t.index ["user_id"], name: "index_item_favorites_on_user_id"
   end
 
+  create_table "item_ratings", force: :cascade do |t|
+    t.bigint "item_id"
+    t.bigint "user_id"
+    t.integer "rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_item_ratings_on_item_id"
+    t.index ["user_id"], name: "index_item_ratings_on_user_id"
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -185,6 +195,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.bigint "user_id", null: false
+    t.float "average_rating"
+    t.integer "rating_count"
     t.index ["category_id"], name: "index_items_on_category_id"
     t.index ["deleted_at"], name: "index_items_on_deleted_at"
     t.index ["user_id"], name: "index_items_on_user_id"
@@ -257,24 +269,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
     t.index ["user_id"], name: "index_posts_users_on_user_id"
   end
 
-  create_table "rating_appointments", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "rate"
-    t.bigint "appointment_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["appointment_id"], name: "index_rating_appointments_on_appointment_id"
-    t.index ["user_id"], name: "index_rating_appointments_on_user_id"
-  end
-
-  create_table "rating_orders", force: :cascade do |t|
+  create_table "rate_service_providers", force: :cascade do |t|
     t.integer "rate"
     t.bigint "user_id", null: false
-    t.bigint "order_id", null: false
+    t.bigint "stylist_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_rating_orders_on_order_id"
-    t.index ["user_id"], name: "index_rating_orders_on_user_id"
+    t.index ["stylist_id"], name: "index_rate_service_providers_on_stylist_id"
+    t.index ["user_id"], name: "index_rate_service_providers_on_user_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -403,6 +405,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
     t.bigint "role_id", null: false
     t.datetime "deleted_at"
     t.string "pay_pal_email"
+    t.float "average_rating"
+    t.integer "rating_count"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -428,10 +432,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_123613) do
   add_foreign_key "orders", "users"
   add_foreign_key "portfolios", "users"
   add_foreign_key "posts", "users"
-  add_foreign_key "rating_appointments", "appointments"
-  add_foreign_key "rating_appointments", "users"
-  add_foreign_key "rating_orders", "orders"
-  add_foreign_key "rating_orders", "users"
+  add_foreign_key "rate_service_providers", "users"
+  add_foreign_key "rate_service_providers", "users", column: "stylist_id"
   add_foreign_key "service_favorites", "users"
   add_foreign_key "service_favorites", "users", column: "stylist_id"
   add_foreign_key "services", "users"

@@ -1,6 +1,6 @@
 class Appointment < ApplicationRecord
   belongs_to :user
-  has_many :rating_appointments, dependent: :destroy
+  # has_many :rating_appointments, dependent: :destroy
   has_many :appointment_services, dependent: :destroy
   has_many :services, through: :appointment_services, source: :service
   belongs_to :stylist, class_name: 'User'

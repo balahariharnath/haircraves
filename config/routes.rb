@@ -51,6 +51,9 @@ Rails.application.routes.draw do
     patch 'update_appointment', to: 'appointments#update'
     get 'my_bookings', to: 'appointments#my_bookings'
     get 'appointment_details', to: 'appointments#details'
+    post 'rate_service_provider', to: 'appointments#rate_service_provider'
+
+    post 'item_rating', to: 'orders#item_rating'
 
 
     post 'create_address', to: 'addresses#create'

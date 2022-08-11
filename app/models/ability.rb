@@ -26,6 +26,7 @@ class Ability
         can :manage, Cart, :user_id => user.id
         can :manage, ItemFavorite, :user_id => user.id
         can :manage, ServiceFavorite, :user_id => user.id
+        can :manage, Order, :user_id => user.id
       end
     end
     # Define abilities for the user here. For example:

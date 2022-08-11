@@ -11,6 +11,8 @@ class Item < ApplicationRecord
   has_and_belongs_to_many :tag_posts, class_name: 'Post', join_table: 'posts_items'
   has_many :cart_products, dependent: :destroy
   has_many :carts, through: :cart_products, source: :cart
+  has_many :item_ratings
+  has_many :rating_users, class_name: "User", through: :item_ratings, source: :user
 
 
   def image_urls

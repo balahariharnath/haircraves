@@ -36,6 +36,16 @@ class Api::AppointmentsController < ApplicationController
     render json: {appointment: @appointment.as_json(include: [:services, :stylist => {methods: [:profile_image_url, :cover_image_url]}])}
   end
 
+  def rate_service_provider
+    @stylist = User.find(params[:stylist_id])
+    if current_user.rate_user_ids.include?(@stylist.id)
+      render json: {message: "Already rating given"}
+    else
+      @rate = current_user.rate_service_providers.create(rate: params[:rate], stylist_id: @stylist.id)
+      render json: {message: "Thank you for rating", rate: @rate.as_json}
+    end
+  end
+
   private
 
   def booking_params
