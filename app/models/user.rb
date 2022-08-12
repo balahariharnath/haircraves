@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
 
   include Rails.application.routes.url_helpers
 
@@ -49,6 +49,7 @@ class User < ApplicationRecord
   has_many :service_appointments, class_name: 'Appointment', foreign_key: "stylist_id"
   has_many :item_ratings
   has_many :rated_items, class_name: 'Item', through: :item_ratings, source: :item
+  has_many :seller_orders, class_name: 'Order', foreign_key: 'seller_id'
 
   #=========================== Validations =======================================================
   validates_presence_of :location, :business_name, :address, if: -> {self.role.role_name == 'stylist' || self.role.role_name == 'business_owner'}
@@ -80,6 +81,17 @@ class User < ApplicationRecord
   #   user = self
   #   super.merge(profile_image_path: user.image.present? ? url_for(user.image) : nil, cover_image_path:  user.cover_image.present? ? url_for(user.cover_image) : nil )
   # end
+
+
+  class << self
+    def current_user=(user)
+      Thread.current[:current_user] = user
+    end
+
+    def current_user
+      Thread.current[:current_user]
+    end
+  end
 
   def send_notification_to_user(title, description)
     payload = {payload: { title: title , description: description } }

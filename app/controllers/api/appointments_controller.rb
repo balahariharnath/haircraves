@@ -4,7 +4,7 @@ class Api::AppointmentsController < ApplicationController
   def create_booking
     @appointment = current_user.appointments.new(booking_params.merge(status: 0))
     if @appointment.save
-      render json: {appointment: @appointment.as_json(include: [:services, :stylist => {methods: [:profile_image_url, :cover_image_url]}])}
+      render json: {message: "Your request has been sent successfully", appointment: @appointment.as_json(include: [:services, :stylist => {methods: [:profile_image_url, :cover_image_url]}])}
     else
       render json: {message: "Appointment not saved"}
     end

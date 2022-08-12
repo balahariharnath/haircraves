@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_11_121249) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_12_094856) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -218,7 +218,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_121249) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string "status"
+    t.integer "status"
     t.integer "qty"
     t.float "sub_total"
     t.float "charges"
@@ -229,9 +229,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_121249) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.string "payment_type"
+    t.string "payment_detail"
+    t.bigint "seller_id"
     t.index ["address_id"], name: "index_orders_on_address_id"
     t.index ["deleted_at"], name: "index_orders_on_deleted_at"
     t.index ["item_id"], name: "index_orders_on_item_id"
+    t.index ["seller_id"], name: "index_orders_on_seller_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -407,6 +411,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_121249) do
     t.string "pay_pal_email"
     t.float "average_rating"
     t.integer "rating_count"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -430,6 +439,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_11_121249) do
   add_foreign_key "items", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "orders", "users"
+  add_foreign_key "orders", "users", column: "seller_id"
   add_foreign_key "portfolios", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "rate_service_providers", "users"
