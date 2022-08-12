@@ -8,7 +8,7 @@ class Api::OrdersController < ApplicationController
       @order = current_user.orders.new(order.merge(status: 'Ordered'))
       if @order.save
         @orders << @order
-        current_user.cart.cart_products.destroy_all
+        current_user.cart.cart_products.destroy_all if current_user.cart.present?
       else
         return render json: {error: @order.errors.full_messages}, status: :unprocessable_entity
       end
