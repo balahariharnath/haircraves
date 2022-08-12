@@ -33,7 +33,12 @@ class Api::AppointmentsController < ApplicationController
   end
 
   def details
-    render json: {appointment: @appointment.as_json(include: [:services, :stylist => {methods: [:profile_image_url, :cover_image_url]}])}
+    render json: {appointment: @appointment.as_json(include: [:services, :stylist => {methods: [:profile_image_url, :cover_image_url], include: [:ratings]}])}
+  end
+
+  def requests
+    @appointments = current_user.service_appointments.where(status: 'Requested')
+    render json: {appointments: @appointments.as_json(include: {user: {methods: [:profile_image_url]}}) }
   end
 
   def rate_service_provider
