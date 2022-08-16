@@ -29,7 +29,6 @@ class User < ApplicationRecord
   has_many :services
   has_one :bank
   has_many :appointments
-  has_many :service_appointments, foreign_key: 'stylist_id'
   has_many :sender_conversations, class_name: "Conversation", :foreign_key => "sender_id"
   has_many :receiver_conversations, class_name: "Conversation", :foreign_key => "receiver_id"
   has_many :device_infos

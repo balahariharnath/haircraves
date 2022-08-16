@@ -55,21 +55,35 @@ class Api::OrdersController < ApplicationController
         @orders = current_user.seller_orders.where('created_at::DATE >= ? and created_at::DATE <= ?', Date.today.at_beginning_of_week, Date.today.at_end_of_week).group("created_at::DATE")
         @order_sold = @orders.where("created_at::DATE = ?", Date.today).sum(:grand_total)
         @order_cancelled = @orders.where("created_at::DATE = ?", Date.today).where("status = ?", 5).sum(:grand_total)
+
+        @appointments = current_user.service_appointments.where('booking_date >= ? and booking_date <= ?', Date.today.at_beginning_of_week, Date.today.at_end_of_week).group("booking_date")
+        @service_sold = @appointments.where("booking_date = ?", Date.today).sum(:total)
+        @service_cancelled = @appointments.where("booking_date = ?", Date.today).where("status = ?", 3).sum(:total)
       elsif params[:filter] == 'month'
         @orders = current_user.seller_orders.where('created_at::DATE >= ? and created_at::DATE <= ?', Date.today.at_beginning_of_year, Date.today.at_end_of_year).select("date_trunc('month', created_at::DATE)").group("date_trunc('month', created_at::DATE)::DATE")
         @order_sold = @orders.where("created_at::DATE >= ? and  created_at::DATE <= ?", Date.today.at_beginning_of_month, Date.today.at_end_of_month).sum(:grand_total)
         @order_cancelled = @orders.where("created_at::DATE >= ? and  created_at::DATE <= ?", Date.today.at_beginning_of_month, Date.today.at_end_of_month).where("status = ?", 5).sum(:grand_total)
+
+        @appointments = current_user.service_appointments.where('booking_date >= ? and booking_date <= ?', Date.today.at_beginning_of_year, Date.today.at_end_of_year).select("date_trunc('month', booking_date::DATE)").group("date_trunc('month', booking_date::DATE)::DATE")
+        @service_sold = @appointments.where("booking_date >= ? and booking_date <= ?", Date.today.at_beginning_of_month, Date.today.at_end_of_month).sum(:total)
+        @service_cancelled = @appointments.where("booking_date >= ? and booking_date <= ?", Date.today.at_beginning_of_month, Date.today.at_end_of_month).where("status = ?", 3).sum(:total)
       end
     else
       @orders = current_user.seller_orders
       @order_sold = @orders.sum(:grand_total)
       @order_cancelled = @orders.where(status: 5).sum(:grand_total)
+
+      @appointments = current_user.service_appointments
+      @service_sold = @appointments.sum(:total)
+      @service_cancelled = @appointments.where(status: 3).sum(:total)
     end
     @orders = @orders.sum(:grand_total)
-    if @orders.present? || @bookings.present?
+    @appointments = @appointments.sum(:total)
+
+    if @orders.present? || @appointments.present?
       # @orders = @orders.group_by {|order| params[:filter] == 'week' ? order.created_at.to_date : order.created_at.beginning_of_month.to_date } if params[:filter].present?
       # @order_total = @order_sold - @order_cancelled
-      render json: {data: {orders: @orders, order_sold: @order_sold, order_cancelled: @order_cancelled}}
+      render json: {data: {orders: @orders, appointments: @appointments, order_sold: @order_sold, order_cancelled: @order_cancelled, service_sold: @service_sold, service_cancelled: @service_cancelled}}
     else
       render json: {data: nil}
     end
