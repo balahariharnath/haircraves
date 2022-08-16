@@ -33,7 +33,8 @@ class Api::OrdersController < ApplicationController
       render json: {orders: @orders.as_json(include: {:seller => {methods: [:profile_image_url]}, :address=> {},
                                                     :item => {methods: [:image_urls, :video_url], include: [:item_ratings]}})}
     else
-      @orders = current_user.seller_orders
+      @orders = current_user.seller_orders.where(status: 4) if params[:filter] == 'Delivered'
+      @orders = current_user.seller_orders.where.not(status: 4) if params[:filter] == 'In Progress'
       render json: {orders: @orders.as_json(include: {:user => {methods: [:profile_image_url]}, :address=> {},
                                                       :item => {methods: [:image_urls, :video_url], include: [:item_ratings]}})}
     end

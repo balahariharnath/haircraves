@@ -53,6 +53,16 @@ class Api::UsersController < ApplicationController
   #   end
   # end
 
+  def forgot_password
+    @user = User.find_by_email(params[:email])
+    if @user.present?
+      @user.send_reset_password_instructions
+      render json: {data: "success"}
+    else
+      render json: {data: "no email"}
+    end
+  end
+
   private
 
   def user_params
