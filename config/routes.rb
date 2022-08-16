@@ -59,6 +59,7 @@ Rails.application.routes.draw do
     get 'my_orders', to: 'orders#my_orders'
     patch 'update_order', to: 'orders#update'
     get 'order_status', to: 'orders#order_status'
+    get 'my_earnings', to: 'orders#my_earnings'
 
 
     post 'create_address', to: 'addresses#create'

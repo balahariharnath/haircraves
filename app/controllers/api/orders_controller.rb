@@ -48,4 +48,30 @@ class Api::OrdersController < ApplicationController
       render json: {message: "Thank you for rating", rate: @rate.as_json}
     end
   end
+
+  def my_earnings
+    if params[:filter].present?
+      if params[:filter] == 'week'
+        @orders = current_user.seller_orders.where('created_at::DATE >= ? and created_at::DATE <= ?', Date.today.at_beginning_of_week, Date.today.at_end_of_week).group("created_at::DATE")
+        @order_sold = @orders.where("created_at::DATE = ?", Date.today).sum(:grand_total)
+        @order_cancelled = @orders.where("created_at::DATE = ?", Date.today).where("status = ?", 5).sum(:grand_total)
+      elsif params[:filter] == 'month'
+        @orders = current_user.seller_orders.where('created_at::DATE >= ? and created_at::DATE <= ?', Date.today.at_beginning_of_year, Date.today.at_end_of_year).select("date_trunc('month', created_at::DATE)").group("date_trunc('month', created_at::DATE)::DATE")
+        @order_sold = @orders.where("created_at::DATE >= ? and  created_at::DATE <= ?", Date.today.at_beginning_of_month, Date.today.at_end_of_month).sum(:grand_total)
+        @order_cancelled = @orders.where("created_at::DATE >= ? and  created_at::DATE <= ?", Date.today.at_beginning_of_month, Date.today.at_end_of_month).where("status = ?", 5).sum(:grand_total)
+      end
+    else
+      @orders = current_user.seller_orders
+      @order_sold = @orders.sum(:grand_total)
+      @order_cancelled = @orders.where(status: 5).sum(:grand_total)
+    end
+    @orders = @orders.sum(:grand_total)
+    if @orders.present? || @bookings.present?
+      # @orders = @orders.group_by {|order| params[:filter] == 'week' ? order.created_at.to_date : order.created_at.beginning_of_month.to_date } if params[:filter].present?
+      # @order_total = @order_sold - @order_cancelled
+      render json: {data: {orders: @orders, order_sold: @order_sold, order_cancelled: @order_cancelled}}
+    else
+      render json: {data: nil}
+    end
+  end
 end
