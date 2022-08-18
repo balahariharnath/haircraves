@@ -55,11 +55,11 @@ class Api::UsersController < ApplicationController
 
   def forgot_password
     @user = User.find_by_email(params[:email])
-    if @user.present?
+    if @user.present? && @user.confirmed?
       @user.send_reset_password_instructions
-      render json: {data: "success"}
+      render json: {message: "We have sent you an email to your registered email address with a link to reset your password"}
     else
-      render json: {data: "no email"}
+      render json: {data: "no email / not confirmed"}
     end
   end
 
