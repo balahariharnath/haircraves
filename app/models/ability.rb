@@ -6,6 +6,7 @@ class Ability
   def initialize(user)
     # can :manage, :all
     can :manage, Comment, :user_id => user.id
+    can :manage, Message, :sender_id => user.id
     if user.role.role_name == 'business_owner' || user.role.role_name == 'stylist'
       can :manage, Service, :user_id => user.id
       can :manage, Availability, :user_id => user.id

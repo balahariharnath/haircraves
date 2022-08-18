@@ -31,6 +31,7 @@ class User < ApplicationRecord
   has_many :appointments
   has_many :sender_conversations, class_name: "Conversation", :foreign_key => "sender_id"
   has_many :receiver_conversations, class_name: "Conversation", :foreign_key => "receiver_id"
+  has_many :messages, :foreign_key => 'sender_id'
   has_many :device_infos
   # has_many :rating_appointments
   has_many :item_favorites

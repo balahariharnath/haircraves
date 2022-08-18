@@ -75,6 +75,11 @@ Rails.application.routes.draw do
     get 'remove_item', to: 'carts#remove_item'
     # patch 'update_qty', to: 'carts#update_qty'
 
+    post 'send_message', to: 'messages#create'
+    get 'conversation_list', to: 'messages#conversation_list'
+    get 'messages', to: 'messages#conversation'
+    get 'clear_message', to: 'messages#clear_message'
+
     post 'add_item_favourites', to: 'item_favorites#add_item_favourites'
     get 'item_favourites', to: 'item_favorites#item_favourites'
     post 'add_service_favourites', to: 'item_favorites#add_service_favourites'
