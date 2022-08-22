@@ -5,7 +5,7 @@ class Api::OrdersController < ApplicationController
     @orders = []
     params[:orders].each do |order|
       order.permit!
-      @order = current_user.orders.new(order.merge(status: 'Ordered'))
+      @order = current_user.orders.new(order)
       if @order.save
         @orders << @order
         current_user.cart.cart_products.destroy_all if current_user.cart.present?

@@ -1,6 +1,6 @@
 class ChangeColumnInOrders < ActiveRecord::Migration[7.0]
   def up
-    change_column :orders, :status, :integer, using: 'status::integer'
+    change_column :orders, :status, :integer, using: 'status::integer', default: 0
     add_column :orders, :payment_type, :string
     add_column :orders, :payment_detail, :string
     add_reference :orders, :seller, foreign_key: {to_table: :users}

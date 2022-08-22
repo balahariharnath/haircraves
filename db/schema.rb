@@ -220,7 +220,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_22_053934) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer "status"
     t.integer "qty"
     t.float "sub_total"
     t.float "charges"
@@ -231,6 +230,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_22_053934) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.integer "status", default: 0
     t.string "payment_type"
     t.string "payment_detail"
     t.bigint "seller_id"
