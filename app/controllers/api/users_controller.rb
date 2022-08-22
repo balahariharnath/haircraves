@@ -9,11 +9,11 @@ class Api::UsersController < ApplicationController
   end
 
   def create_user
-      @user = User.new(user_params)
-      if @user.save
-        render json: {message: "Signed up successfully", data: @user}, status: :created
+      user = User.new(user_params)
+      if user.save
+        render json: {message: "Signed up successfully", data: user}, status: :created
       else
-        render json: {error: @user.errors.full_messages}, status: :unprocessable_entity
+        render json: {error: user.errors.full_messages}, status: :unprocessable_entity
       end
   end
 

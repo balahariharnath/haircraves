@@ -29,24 +29,24 @@ class Api::OrdersController < ApplicationController
 
   def my_orders
     if current_user.role == "customer"
-      @orders = current_user.orders
-      render json: {orders: @orders.as_json(include: {:seller => {methods: [:profile_image_url]}, :address=> {},
+      orders = current_user.orders
+      render json: {orders: orders.as_json(include: {:seller => {methods: [:profile_image_url]}, :address=> {},
                                                     :item => {methods: [:image_urls, :video_url], include: [:item_ratings]}})}
     else
-      @orders = current_user.seller_orders.where(status: 4) if params[:filter] == 'Delivered'
-      @orders = current_user.seller_orders.where.not(status: 4) if params[:filter] == 'In Progress'
-      render json: {orders: @orders.as_json(include: {:user => {methods: [:profile_image_url]}, :address=> {},
+      orders = current_user.seller_orders.where(status: 4) if params[:filter] == 'Delivered'
+      orders = current_user.seller_orders.where.not(status: 4) if params[:filter] == 'In Progress'
+      render json: {orders: orders.as_json(include: {:user => {methods: [:profile_image_url]}, :address=> {},
                                                       :item => {methods: [:image_urls, :video_url], include: [:item_ratings]}})}
     end
   end
 
   def item_rating
-    @item = Item.find(params[:item_id])
-    if current_user.rated_item_ids.include?(@item.id)
+    item = Item.find(params[:item_id])
+    if current_user.rated_item_ids.include?(item.id)
       render json: {message: "Already rating given"}
     else
-      @rate = current_user.item_ratings.create(rate: params[:rate], item_id: @item.id)
-      render json: {message: "Thank you for rating", rate: @rate.as_json}
+      rate = current_user.item_ratings.create(rate: params[:rate], item_id: item.id)
+      render json: {message: "Thank you for rating", rate: rate.as_json}
     end
   end
 
