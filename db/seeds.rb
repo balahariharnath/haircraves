@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-roles = [{role_name: "customer"}, {role_name: "business_owner"}, {role_name: "stylist"}]
-
-roles.each do |role|
-  Role.where(role_name: role[:role_name]).first_or_create
-end
+# roles = [{role_name: "customer"}, {role_name: "business_owner"}, {role_name: "stylist"}]
+#
+# roles.each do |role|
+#   Role.where(role_name: role[:role_name]).first_or_create
+# end

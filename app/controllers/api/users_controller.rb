@@ -9,32 +9,21 @@ class Api::UsersController < ApplicationController
   end
 
   def create_user
-    role = Role.find_by_role_name('customer')
-    if role.present?
-      @user = role.users.build(user_params)
+      @user = User.new(user_params)
       if @user.save
         render json: {message: "Signed up successfully", data: @user}, status: :created
       else
         render json: {error: @user.errors.full_messages}, status: :unprocessable_entity
       end
-    else
-      render json: {error: "Please check the type"}, status: :unprocessable_entity
-    end
   end
 
   def update_profile
-    role = Role.find_by_role_name(params[:type])
-    if role.present?
-      @user = current_user
-      @user.assign_attributes(user_params.merge!(role_id: role.id))
-      if @user.save
+    current_user.assign_attributes(user_params)
+      if current_user.save
         render json: { message: "Profile created successfully", data: @user.as_json(methods: [:profile_image_url, :cover_image_url])}, status: :created
       else
-        render json: {error: @user.errors.full_messages}, status: :unprocessable_entity
+        render json: {error: current_user.errors.full_messages}, status: :unprocessable_entity
       end
-    else
-      render json: {error: "Please check the type"}, status: :unprocessable_entity
-    end
   end
 
   # def forgot_password

@@ -28,7 +28,7 @@ class Api::OrdersController < ApplicationController
   end
 
   def my_orders
-    if current_user.role.role_name == "customer"
+    if current_user.role == "customer"
       @orders = current_user.orders
       render json: {orders: @orders.as_json(include: {:seller => {methods: [:profile_image_url]}, :address=> {},
                                                     :item => {methods: [:image_urls, :video_url], include: [:item_ratings]}})}

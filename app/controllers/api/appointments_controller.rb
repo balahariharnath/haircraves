@@ -12,7 +12,7 @@ class Api::AppointmentsController < ApplicationController
 
   def update
     @appointment= Appointment.find(params[:id])
-    if current_user.role.role_name == "customer"
+    if current_user.role == "customer"
       @appointment.update(booking_params)
     else
       @appointment.update(status: params[:status])
@@ -21,7 +21,7 @@ class Api::AppointmentsController < ApplicationController
   end
 
   def my_bookings
-    if current_user.role.role_name == 'customer'
+    if current_user.role == 'customer'
       @bookings = current_user.appointments.where("status NOT IN (?)", [3,5]) if params[:upcoming_booking].present?
       @bookings = current_user.appointments.where("status IN (?)", [3,5]) if params[:completed_booking].present?
     else

@@ -1,4 +1,5 @@
 class Message < ApplicationRecord
+  #================== Associations =================================
   belongs_to :conversation
   belongs_to :sender, :class_name => 'User'
 

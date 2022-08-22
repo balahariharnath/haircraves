@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :items
   has_many :availabilities
   has_many :portfolios
-  belongs_to :role
+  # belongs_to :role
   has_one_attached :image
   has_one_attached :cover_image
   has_many :orders
@@ -52,16 +52,18 @@ class User < ApplicationRecord
   has_many :seller_orders, class_name: 'Order', foreign_key: 'seller_id'
 
   #=========================== Validations =======================================================
-  validates_presence_of :location, :business_name, :address, if: -> {self.role.role_name == 'stylist' || self.role.role_name == 'business_owner'}
-  validates_presence_of :first_name, :last_name, if: -> {self.role.role_name == 'stylist' || self.role.role_name == 'customer'}, on: :update
-  validates_presence_of :year_of_exp, if: -> {self.role.role_name == 'stylist'}
+  validates_presence_of :location, :business_name, :address, if: -> {self.role == 'stylist' || self.role == 'business_owner'}
+  validates_presence_of :first_name, :last_name, if: -> {self.role == 'stylist' || self.role == 'customer'}, on: :update
+  validates_presence_of :year_of_exp, if: -> {self.role == 'stylist'}
 
   #========================= Callbacks ===========================================================
   after_save :create_availabilities
 
 
+  enum role: ['customer', 'business owner', 'stylist']
+
   def create_availabilities
-    return if self.availabilities.present? || self.role.role_name == 'customer'
+    return if self.availabilities.present? || self.role == 'customer'
 
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     days.each do |day|

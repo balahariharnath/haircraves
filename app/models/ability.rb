@@ -7,7 +7,7 @@ class Ability
     # can :manage, :all
     can :manage, Comment, :user_id => user.id
     can :manage, Message, :sender_id => user.id
-    if user.role.role_name == 'business_owner' || user.role.role_name == 'stylist'
+    if user.role == 'business owner' || user.role == 'stylist'
       can :manage, Service, :user_id => user.id
       can :manage, Availability, :user_id => user.id
       can :manage, Category, :user_id => user.id
@@ -17,7 +17,7 @@ class Ability
       can :manage, Portfolio, :user_id => user.id
       can [:my_orders, :update, :order_status, :my_earnings], Order, :seller_id => user.id
     else
-      if user.role.role_name == 'customer'
+      if user.role == 'customer'
         can [:service_list, :profile, :service_categories, :service_providers], Service
         can :manage, Post, :user_id => user.id
         can :category_list, Category

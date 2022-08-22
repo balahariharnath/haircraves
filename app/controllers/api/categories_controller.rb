@@ -11,7 +11,7 @@ class Api::CategoriesController < ApplicationController
   end
 
   def category_list
-    @category = current_user.role.role_name == 'customer'? Category.all : current_user.categories
+    @category = current_user.role == 'customer'? Category.all : current_user.categories
     render json: {category: @category.as_json}
   end
 
