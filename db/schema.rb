@@ -68,7 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_18_065342) do
   create_table "appointments", force: :cascade do |t|
     t.date "booking_date"
     t.string "reason_for_cancel"
-    t.integer "status"
+    t.integer "status", default: 0
     t.time "time"
     t.boolean "paid", default: false
     t.float "sub_total"
