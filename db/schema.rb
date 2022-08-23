@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_22_053934) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_23_045108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -234,6 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_22_053934) do
     t.string "payment_type"
     t.string "payment_detail"
     t.bigint "seller_id"
+    t.datetime "delivered_date"
     t.index ["address_id"], name: "index_orders_on_address_id"
     t.index ["deleted_at"], name: "index_orders_on_deleted_at"
     t.index ["item_id"], name: "index_orders_on_item_id"
